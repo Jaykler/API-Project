@@ -2,6 +2,7 @@
 using HildaVilla.Api.Models;
 using HildaVilla.Api.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.FlowAnalysis;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -22,13 +23,13 @@ namespace HildaVilla.Api.Controllers
         [HttpGet("GetVillaById")]
         public ActionResult<VillaDto> GetByID(int id)
         {
-            
-            if (id == 0) return BadRequest("id cant be 0");
 
+            if (id == 0) return BadRequest("Id can't be 0");
+            
             var villa = VillaStore.villaList.FirstOrDefault(x => x.Id == id)!;
 
-            if (villa == null) return NotFound("id cant be empty or null");
-
+            if (villa is null) return NotFound($"the villa with id {id} wasn't found");
+            
             return Ok(villa) ;
 
         }
