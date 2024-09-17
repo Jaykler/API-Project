@@ -38,15 +38,23 @@ namespace HildaVilla.Api.Controllers
         [HttpPost("AddVilla")]
         public IActionResult Post([FromBody] VillaDto villaDto)
         {
-            //var villaList = VillaStore.villaList.Find(villaDto.Id);
-
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (villaDto == null) return BadRequest(villaDto);
+            if (villaDto.Id > 0) StatusCode(StatusCodes.Status500InternalServerError);
+            
+            villaDto.Id = VillaStore.villaList.OrderByDescending(v => v.Id).FirstOrDefault()!.Id + 1;
+            
+            VillaStore.villaList.Add(villaDto);
+            
             return Ok("agregado con exito");
         }
 
         // PUT api/<VillaController>/5
         [HttpPut("UpdateVilla")]
-        public void Put(int id, [FromBody] string value)
+        public IActionResult Put(int id, [FromBody] string value)
         {
+
+            return Ok();
         }
 
         // DELETE api/<VillaController>/5
